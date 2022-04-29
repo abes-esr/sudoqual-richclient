@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <!-- Qualinka Nature -->
+   <extension
+         id="QualinkaNature"
+         name="Qualinka Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="fr.abes.qualinka.eclipse.nature.QualinkaNature">
+         </run>
+      </runtime>
+      <requires-nature
+            id="org.eclipse.jdt.core.javanature">
+      </requires-nature>
+   </extension>
+   
+   <!-- Qualinka Nature Image -->
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="icons/books-8x8.png"
+            id="fr.abes.qualinka.eclipse.QualinkaProjectNature.image"
+            natureId="fr.abes.qualinka.eclipse.nature.QualinkaNature">
+      </image>
+   </extension>
+   
+   <!-- Qualinka Property Tester -->
+   
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="fr.abes.qualinka.eclipse.propertyTester.IContainerPropertyTester"
+            id="fr.abes.qualinka.eclipse.nature.qualinkaNature.icontainerPropertyTester"
+            namespace="fr.abes.qualinka.eclipse.nature.properties"
+            properties="containsJson, isFeatureDir, isFilterDir, isCriterionDir"
+            type="org.eclipse.core.resources.IContainer">
+      </propertyTester>
+   </extension>
+   
+   <!-- Qualinka Nature Commands Category -->
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="fr.abes.qualinka.eclipse.nature.qualinkaNature.category"
+            name="Qualinka Project Nature commands">
+      </category>
+      <command
+            categoryId="fr.abes.qualinka.eclipse.nature.qualinkaNature.category"
+            defaultHandler="fr.abes.qualinka.eclipse.nature.AddRemoveQualinkaNatureHandler"
+            id="fr.abes.qualinka.eclipse.nature.addRemoveQualinkaNature"
+            name="Add/RemoveQualinka Project Nature">
+      </command>
+   </extension>
+   
+   <!-- Qualinka Nature Menu Contributions -->
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <command
+               commandId="fr.abes.qualinka.eclipse.nature.addRemoveQualinkaNature"
+               icon="icons/books-16x16.png"
+               label="Remove Qualinka Nature from project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="fr.abes.qualinka.eclipse.nature.QualinkaNature">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="fr.abes.qualinka.eclipse.nature.addRemoveQualinkaNature"
+               icon="icons/books-16x16.png"
+               label="Add Qualinka Nature to project"
+               style="push">
+            <visibleWhen
+                   checkEnabled="false">
+                <and>
+	               <with
+	                     variable="selection">
+	                  <count
+	                        value="1">
+	                  </count>
+	                  <iterate>
+	                     <adapt
+	                           type="org.eclipse.core.resources.IProject">
+	                        <not>
+		                        <test
+		                              property="org.eclipse.core.resources.projectNature"
+		                              value="fr.abes.qualinka.eclipse.nature.QualinkaNature">
+		                        </test>
+	                        </not>
+	                     </adapt>
+	                  </iterate>
+	               </with>
+	               <with
+	                     variable="selection">
+	                  <count
+	                        value="1">
+	                  </count>
+	                  <iterate>
+	                     <adapt
+	                           type="org.eclipse.core.resources.IProject">
+	                        <test
+	                              property="org.eclipse.core.resources.projectNature"
+	                              value="org.eclipse.jdt.core.javanature">
+	                        </test>
+	                     </adapt>
+	                  </iterate>
+	               </with>
+               </and>
+            </visibleWhen>
+          
+         </command>
+      </menuContribution>
+   </extension>
+   
+   <!-- Property page -->
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="fr.abes.qualinka.eclipse.preferences.QualinkaPropertyPage"
+            id="QualinkaNature.page1"
+            name="Qualinka">
+            <enabledWhen>
+               <and>
+                  <instanceof
+                        value="org.eclipse.core.resources.IProject">
+                  </instanceof>
+                  <adapt type="org.eclipse.core.resources.IProject">
+			          <test property="org.eclipse.core.resources.projectNature" value="fr.abes.qualinka.eclipse.nature.QualinkaNature"/>
+			     </adapt>      
+               </and>
+         </enabledWhen>
+      </page>
+   </extension>
+   
+   <!-- Preferences Project Scope -->
+   <extension id="fr.abes.qualinka.eclipse.preferences" point="org.eclipse.core.runtime.preferences" name="preferences">
+		<scope name="project" class="org.eclipse.core.internal.resources.ProjectPreferences"/>
+	</extension>
+   
+   <!-- -->
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+         
+      <navigatorContent
+            activeByDefault="true"
+            id="fr.abes.qualinka.eclipse.navigator"
+            contentProvider="fr.abes.qualinka.eclipse.navigator.QualinkaPipelinedTreeContentProvider"
+            labelProvider="fr.abes.qualinka.eclipse.navigator.QualinkaLabelProvider"
+            icon="icons/books-16x16.png"
+            name="Qualinka"
+            priority="higher">
+         <triggerPoints>
+         	<or>
+         		<and>
+		            <instanceof
+		                  value="org.eclipse.core.resources.IProject">
+		            </instanceof>  
+		            <adapt type="org.eclipse.core.resources.IProject">
+				      <test property="org.eclipse.core.resources.projectNature" value="fr.abes.qualinka.eclipse.nature.QualinkaNature"/>
+				    </adapt> 
+	            </and>
+	            <instanceof
+                  value="org.eclipse.core.resources.IFolder">
+            	</instanceof>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <instanceof
+                  value="org.eclipse.core.resources.IFolder">
+            </instanceof>
+         </possibleChildren>
+         <override
+					policy="InvokeAlwaysRegardlessOfSuppressedExt"
+					suppressedExtensionId="org.eclipse.ui.navigator.resourceContent"/>
+      </navigatorContent>
+   </extension>
+   
+   <!-- Bind the Properties content extension to the viewer -->
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension pattern="fr.abes.qualinka.eclipse.navigator"/>
+         </includes>
+      </viewerContentBinding>
+   </extension>
+     
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="fr.abes.qualinka.eclipse.debug.FeatureLaunchShortcut"
+            icon="icons/bench.png"
+            id="fr.abes.qualinka.eclipse.nature.debug.LaunchShortcut.feature"
+            label="%menu.run.feature"
+            modes="run, debug">
+            <contextualLaunch>
+	           <enablement>
+	             <with variable="selection">
+	               <count value="1"/>
+	               <iterate>
+	                 <test property="fr.abes.qualinka.eclipse.nature.properties.isFeature" forcePluginActivation="true"/>
+	                 <test property="org.eclipse.debug.ui.matchesPattern" value="*.java"/>
+	               </iterate>
+	             </with>
+	           </enablement>
+	  		 </contextualLaunch>
+      </shortcut>
+      <shortcut
+            class="fr.abes.qualinka.eclipse.debug.FilterLaunchShortcut"
+            icon="icons/bench.png"
+            id="fr.abes.qualinka.eclipse.nature.debug.LaunchShortcut.filter"
+            label="%menu.run.filter"
+            modes="run, debug">
+         <contextualLaunch>
+            <enablement>
+               <with variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <test property="org.eclipse.debug.ui.matchesPattern" value="*.java" />
+                     <test property="fr.abes.qualinka.eclipse.nature.properties.isFilter" forcePluginActivation="true" />
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
+      <shortcut
+            class="fr.abes.qualinka.eclipse.debug.CriterionLaunchShortcut"
+            icon="icons/bench.png"
+            id="fr.abes.qualinka.eclipse.nature.debug.LaunchShortcut.criterion"
+            label="%menu.run.criterion"
+            modes="run, debug">
+            <contextualLaunch>
+	           <enablement>
+	             <with variable="selection">
+	               <count value="1"/>
+	               <iterate>
+	                 <test property="fr.abes.qualinka.eclipse.nature.properties.isCriterion" forcePluginActivation="true"/>
+	                 <test property="org.eclipse.debug.ui.matchesPattern" value="*.java"/>
+	               </iterate>
+	             </with>
+	           </enablement>
+	  		 </contextualLaunch>
+      </shortcut>
+      <shortcut
+             class="fr.abes.qualinka.eclipse.run.EvalLaunchShortcut"
+             icon="icons/books-16x16.png"
+             id="fr.abes.qualinka.eclipse.nature.bench.LaunchShortcut.eval"
+             label="%menu.run.eval"
+             modes="run, debug">
+          <contextualLaunch>
+              <enablement> 
+                <with variable="selection">
+                   <iterate>
+                   	  <or>
+	                      <test
+	                            property="org.eclipse.debug.ui.matchesPattern"
+	                            value="*.json">
+	                      </test>
+	                      <and>
+		                      <instanceof
+			                        value="org.eclipse.core.resources.IFolder">
+			                  </instanceof>
+		                      <test
+		                            property="fr.abes.qualinka.eclipse.nature.properties.containsJson" forcePluginActivation="true">
+		                      </test>
+	                      </and>
+                      </or>
+                   </iterate>
+                </with>
+             </enablement>
+          </contextualLaunch>
+       </shortcut>
+       <shortcut
+             class="fr.abes.qualinka.eclipse.run.LinkLaunchShortcut"
+             icon="icons/books-16x16.png"
+             id="fr.abes.qualinka.eclipse.nature.bench.LaunchShortcut.link"
+             label="%menu.run.link"
+             modes="run, debug">
+          <contextualLaunch>
+               <enablement>
+	             <with variable="selection">
+	               <count value="1"/>
+	               <iterate>
+	                 <or>
+	                     <test
+	                            property="org.eclipse.debug.ui.matchesPattern"
+	                            value="*.json">
+	                     </test>
+		                 <and>
+		                   <instanceof
+		                        value="org.eclipse.core.resources.IProject">
+		                   </instanceof>
+		                   <adapt type="org.eclipse.core.resources.IProject">
+					          <test property="org.eclipse.core.resources.projectNature" value="fr.abes.qualinka.eclipse.nature.QualinkaNature"/>
+					       </adapt>      
+		                 </and>
+	                 </or>
+	               </iterate>
+	             </with>
+	           </enablement>
+          </contextualLaunch>
+       </shortcut>
+       <shortcut
+             class="fr.abes.qualinka.eclipse.run.CompleteLaunchShortcut"
+             icon="icons/books-16x16.png"
+             id="fr.abes.qualinka.eclipse.nature.bench.LaunchShortcut.complete"
+             label="%menu.run.complete"
+             modes="run, debug">
+          <contextualLaunch>
+               <enablement>
+	             <with variable="selection">
+	               <count value="1"/>
+	               <iterate>
+	                  <or>
+	                     <test
+	                            property="org.eclipse.debug.ui.matchesPattern"
+	                            value="*.json">
+	                     </test>
+		                 <and>
+		                   <instanceof
+		                        value="org.eclipse.core.resources.IProject">
+		                   </instanceof>
+		                   <adapt type="org.eclipse.core.resources.IProject">
+					          <test property="org.eclipse.core.resources.projectNature" value="fr.abes.qualinka.eclipse.nature.QualinkaNature"/>
+					       </adapt>      
+		                 </and>
+	                 </or>
+	               </iterate>
+	             </with>
+	           </enablement>
+          </contextualLaunch>
+       </shortcut>
+       <shortcut
+             class="fr.abes.qualinka.eclipse.run.DiagnosticLaunchShortcut"
+             icon="icons/books-16x16.png"
+             id="fr.abes.qualinka.eclipse.nature.bench.LaunchShortcut.diagnostic"
+             label="%menu.run.diagnostic"
+             modes="run, debug">
+          <contextualLaunch>
+               <enablement>
+	             <with variable="selection">
+	               <count value="1"/>
+	               <iterate>
+	                  <or>
+	                     <test
+	                            property="org.eclipse.debug.ui.matchesPattern"
+	                            value="*.json">
+	                     </test>
+		                 <and>
+		                   <instanceof
+		                        value="org.eclipse.core.resources.IProject">
+		                   </instanceof>
+		                   <adapt type="org.eclipse.core.resources.IProject">
+					          <test property="org.eclipse.core.resources.projectNature" value="fr.abes.qualinka.eclipse.nature.QualinkaNature"/>
+					       </adapt>      
+		                 </and>
+	                 </or>
+	               </iterate>
+	             </with>
+	           </enablement>
+          </contextualLaunch>
+       </shortcut>
+       <shortcut
+             class="fr.abes.qualinka.eclipse.run.ClusterLaunchShortcut"
+             icon="icons/books-16x16.png"
+             id="fr.abes.qualinka.eclipse.nature.bench.LaunchShortcut.cluster"
+             label="%menu.run.cluster"
+             modes="run, debug">
+          <contextualLaunch>
+             <enablement>
+                <with
+                      variable="selection">
+                   <count
+                         value="1">
+                   </count>
+                   <iterate>
+                      <or>
+                         <test
+                               property="org.eclipse.debug.ui.matchesPattern"
+                               value="*.json">
+                         </test>
+                         <and>
+                            <instanceof
+                                  value="org.eclipse.core.resources.IProject">
+                            </instanceof>
+                            <adapt
+                                  type="org.eclipse.core.resources.IProject">
+                               <test
+                                     property="org.eclipse.core.resources.projectNature"
+                                     value="fr.abes.qualinka.eclipse.nature.QualinkaNature">
+                               </test>
+                            </adapt>
+                         </and>
+                      </or>
+                   </iterate>
+                </with>
+             </enablement>
+          </contextualLaunch>
+       </shortcut>
+       <shortcut
+             class="fr.abes.qualinka.eclipse.run.LightLaunchShortcut"
+             icon="icons/books-16x16.png"
+             id="fr.abes.qualinka.eclipse.nature.bench.LaunchShortcut.light"
+             label="%menu.run.light"
+             modes="run, debug">
+          <contextualLaunch>
+             <enablement>
+                <with
+                      variable="selection">
+                   <count
+                         value="1">
+                   </count>
+                   <iterate>
+                      <or>
+                         <test
+                               property="org.eclipse.debug.ui.matchesPattern"
+                               value="*.json">
+                         </test>
+                         <and>
+                            <instanceof
+                                  value="org.eclipse.core.resources.IProject">
+                            </instanceof>
+                            <adapt
+                                  type="org.eclipse.core.resources.IProject">
+                               <test
+                                     property="org.eclipse.core.resources.projectNature"
+                                     value="fr.abes.qualinka.eclipse.nature.QualinkaNature">
+                               </test>
+                            </adapt>
+                         </and>
+                      </or>
+                   </iterate>
+                </with>
+             </enablement>
+          </contextualLaunch>
+       </shortcut>
+       <shortcut
+             class="fr.abes.qualinka.eclipse.run.AlignLaunchShortcut"
+             icon="icons/books-16x16.png"
+             id="fr.abes.qualinka.eclipse.nature.bench.LaunchShortcut.align"
+             label="%menu.run.align"
+             modes="run, debug">
+          <contextualLaunch>
+             <enablement>
+                <with
+                      variable="selection">
+                   <count
+                         value="1">
+                   </count>
+                   <iterate>
+                      <or>
+                         <test
+                               property="org.eclipse.debug.ui.matchesPattern"
+                               value="*.json">
+                         </test>
+                         <and>
+                            <instanceof
+                                  value="org.eclipse.core.resources.IProject">
+                            </instanceof>
+                            <adapt
+                                  type="org.eclipse.core.resources.IProject">
+                               <test
+                                     property="org.eclipse.core.resources.projectNature"
+                                     value="fr.abes.qualinka.eclipse.nature.QualinkaNature">
+                               </test>
+                            </adapt>
+                         </and>
+                      </or>
+                   </iterate>
+                </with>
+             </enablement>
+          </contextualLaunch>
+       </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="fr.abes.qualinka.eclipse.perspectives.QualinkaPerspective"
+            icon="icons/books-16x16.png"
+            id="fr.abes.qualinka.eclipse.perspectives.QualinkaPerspective"
+            name="Qualinka">
+      </perspective>
+   </extension>
+
+   
+   
+   
+
+</plugin>

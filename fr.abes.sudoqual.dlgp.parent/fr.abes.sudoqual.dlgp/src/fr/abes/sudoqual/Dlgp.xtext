@@ -1,0 +1,122 @@
+grammar fr.abes.sudoqual.Dlgp hidden(WS, ML_COMMENT)
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+generate dlgp "http://www.abes.fr/sudoqual/Dlgp"
+
+Document:
+	(statements+=Rule '.')*
+;
+	
+Rule:
+	('[' label=Label ']')? head=HeadAtom ':-' body=Conjunction 
+;
+
+Conjunction:
+	atoms+=Atom (',' atoms+=Atom)*
+;
+
+Atom:
+	(dimension=[DimensionPredicate|DIM_IDENT] | predicate=Predicate) '(' terms+=Term (',' terms+=Term)* ')'
+;
+
+HeadAtom:
+	(dimension=DimensionPredicate | goal=GoalPredicate) '(' terms+=Term (',' terms+=Term)* ')'
+;
+
+GoalPredicate:
+	name=SAME_AS | name=DIFF_FROM
+;
+
+DimensionPredicate:
+	name=DIM_IDENT
+;
+
+Predicate:
+	name=LIDENT
+;
+
+Term:
+	Variable | Constant | Literal
+;
+
+Variable:
+	label=UIDENT
+;
+
+Constant:
+	label=LIDENT
+;
+
+Literal:
+	label=STRING | value=INTEGER
+;
+
+Label:
+	(TEXT | LIDENT | UIDENT)+
+;
+
+//
+// DataType
+//
+
+terminal STRING:
+		'"' ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|'"') )* '"' |
+		"'" ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|"'") )* "'"
+;
+
+terminal INTEGER returns ecore::EInt: 
+	('+'|'-')?('0'..'9')+
+;
+
+//
+// Identifiers
+//
+
+
+terminal UIDENT:
+	('A'..'Z') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*;
+
+terminal DIFF_FROM:
+	'diffFrom'
+;
+
+terminal SAME_AS:
+	'sameAs'
+;
+
+terminal DIM_IDENT: 
+// terminal LIDENT:
+	// the name ID is important
+	'dim_' ('a'..'z') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*
+;
+
+terminal LIDENT: 
+	('a'..'z') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*
+;
+
+terminal TEXT:
+	('a'..'z' | 'A'..'Z' | '0'..'9' | '_' | '-')+
+;
+
+//
+// hidden
+//
+
+terminal ML_COMMENT:
+	// Single line comment using ML_COMMENT terminal (Multi-Line)  to
+	// support folding
+    ('%' !('\n'|'\r')* ('\r'? '\n'))*
+    '%' !('\n'|'\r')* ('\r'? '\n')?
+;
+
+
+
+terminal WS: 
+	(' '|'\t'|'\r'|'\n')+
+;
+
+//
+// Fragments
+//
+

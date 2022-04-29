@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: fr.abes.sudoqual.dlgp.ui
+Bundle-ManifestVersion: 2
+Bundle-Name: fr.abes.sudoqual.dlgp.ui
+Bundle-Vendor: My Company
+Bundle-Version: 1.2.1
+Bundle-SymbolicName: fr.abes.sudoqual.dlgp.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: fr.abes.sudoqual.dlgp,
+ fr.abes.sudoqual.dlgp.ide,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.ui.editors;bundle-version="3.5.0",
+ org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.ui,
+ org.eclipse.compare,
+ org.eclipse.xtext.builder,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtend.lib;bundle-version="2.14.0";resolution:=optional,
+ org.eclipse.jdt.core;bundle-version="3.17.0",
+ org.eclipse.jdt.ui;bundle-version="3.17.0",
+ fr.abes.qualinka.eclipse.nature;bundle-version="0.2.0"
+Import-Package: fr.abes.qualinka.eclipse,
+ org.apache.log4j,
+ org.eclipse.jdt.core
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: fr.abes.sudoqual.ui.contentassist,
+ fr.abes.sudoqual.dlgp.ui.internal,
+ fr.abes.sudoqual.ui.quickfix
+Bundle-Activator: fr.abes.sudoqual.dlgp.ui.internal.DlgpActivator

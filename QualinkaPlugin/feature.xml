@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="fr.abes.eclipse.qualinka"
+      label="QualinkaPlugin"
+      version="1.8.0">
+
+   <description>
+      = Plugin Qualinka pour Eclipse =
+* Qualinka perspective
+* Project Explorer specific view
+* Creational wizards for features, criterions, filters, scenarios
+and DLGP files.
+* Run/Debug Qualinka from JSON file
+** Link
+** Diagnostic
+** Complete
+** Eval
+* Run/Debug features, criterions and filters
+* DLGP Editors
+** predicate names autocompletion
+** syntax &amp; semantic errors highlight 
+** display predicate documentation when hovering
+** shortcut to open corresponding Java class from predicate (Ctrl+click)
+** criterion predicate threshold validation
+   </description>
+
+   <copyright>
+      Copyright © ABES 2019
+Contributors :
+- Clément SIPIETER &lt;csipieter@6pi.fr&gt;
+   </copyright>
+
+   <license url="">
+      © 2019 ABES
+© 2019 Clément Sipieter - Tous droits cédés
+   </license>
+
+   <requires>
+      <import plugin="fr.abes.sudoqual.dlgp"/>
+      <import plugin="fr.abes.sudoqual.dlgp.ide"/>
+      <import plugin="fr.abes.sudoqual.dlgp.ui"/>
+      <import plugin="fr.abes.qualinka.eclipse.nature"/>
+   </requires>
+
+   <plugin
+         id="fr.abes.sudoqual.dlgp"
+         download-size="0"
+         install-size="0"
+         version="1.2.1"
+         unpack="false"/>
+
+   <plugin
+         id="fr.abes.sudoqual.dlgp.ide"
+         download-size="0"
+         install-size="0"
+         version="1.2.1"
+         unpack="false"/>
+
+   <plugin
+         id="fr.abes.sudoqual.dlgp.ui"
+         download-size="0"
+         install-size="0"
+         version="1.2.1"
+         unpack="false"/>
+
+   <plugin
+         id="fr.abes.qualinka.eclipse.nature"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

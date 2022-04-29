@@ -1,0 +1,5 @@
+bin/
+/.metadata/
+xtend-gen
+src-gen
+generated

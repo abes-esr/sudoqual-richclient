@@ -1,0 +1,31 @@
+package ${package};
+
+import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.abes.sudoqual.rule_engine.feature.PreprocessedFeature;
+import fr.abes.sudoqual.rule_engine.feature.type.FeatureType;
+import fr.abes.sudoqual.rule_engine.feature.type.JSONArrayFeatureType;
+import fr.abes.sudoqual.util.json.JSONArrays;
+
+public class ${Name} implements PreprocessedFeature<JSONArray, Object> {
+
+	private static final Logger logger = LoggerFactory.getLogger(${Name}.class);
+	
+	public ${Name}() {
+	}
+
+	@Override
+	public String getName() {
+		return "${key}";
+	}
+	
+	@Override
+	public Object buildValue(JSONArray value) {
+		// TODO implement me
+		return null;
+	}
+	
+	
+}
