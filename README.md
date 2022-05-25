@@ -1,2 +1,2 @@
 # sudoqual-richclient
-Plugin Eclipse permettant d'utiliser Sudoqual-Sudoc : https://github.com/abes-esr/sudoqual-sudoc
+Plugin Eclipse permettant d'utiliser Sudoqual-Framework : https://github.com/abes-esr/sudoqual-framework
